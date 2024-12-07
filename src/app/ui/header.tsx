@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NavBar() {
   return (
-    <div className="text-center">
+    <div className="text-center m-10 sticky">
       <ul>
         <li>
           <Link href={"/"}>Home</Link>

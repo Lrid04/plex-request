@@ -1,18 +1,17 @@
-import data from "../data/movies.json";
-import MovieBlock from "../ui/movieInfo";
-import { Movie } from "../lib/movie"
+import dynamic from "next/dynamic";
+import Loading from "../ui/loading";
 import NavBar from "../ui/header";
+
+const MovieList = dynamic(() => import("../ui/movieList"), {
+  loading: () => <Loading />,
+});
 
 export default function Collection() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       <NavBar />
-      <div className="grid grid-cols-2 grid-flow-rows">
-        {data
-          .filter((object) => object.requested == false)
-          .map((movie: Movie) => (
-            <MovieBlock movie={movie} key={movie.movieId} />
-          ))}
+      <div className="grid grid-cols-2 grid-flow-rows items-center justify-items-center px-10 pb-20 gap-16 sm:p-20  max-h-screen overflow-auto">
+        <MovieList requested={false} />
       </div>
     </div>
   );

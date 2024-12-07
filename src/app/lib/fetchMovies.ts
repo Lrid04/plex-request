@@ -4,7 +4,7 @@ export function FetchMovies(
   movieName: FormDataEntryValue,
   movieYear: FormDataEntryValue | null
 ) {
-  let movieSelect: Movie[] = [];
+  const movieSelect: Movie[] = [];
   let url: string = "";
   if (movieYear == "") {
     url = `https://api.themoviedb.org/3/search/movie?query=${movieName}&include_adult=false&language=en-US&page=1`;
@@ -23,18 +23,19 @@ export function FetchMovies(
   fetch(url, options)
     .then((res) => res.json())
     .then((json) => {
-      console.log(json);
       json.results.map(
         (result: {
           id: number;
           title: string;
           release_date: string;
+          overview: string;
           poster_path: string;
         }) => {
           movieSelect.push({
             movieId: result.id,
             movieName: result.title,
             releaseYear: Number(result.release_date.slice(0, 4)),
+            summary: result.overview,
             posterUrl: `https://image.tmdb.org/t/p/original/${result.poster_path}`,
             requested: false,
           });
@@ -45,6 +46,5 @@ export function FetchMovies(
       console.log(err);
       return [];
     });
-  console.log(movieSelect);
   return movieSelect;
 }

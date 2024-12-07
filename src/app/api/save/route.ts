@@ -1,24 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-
+import { NextRequest, NextResponse } from "next/server";
+import { Movie } from "../../lib/movie";
+import movies from "../../data/test.json";
+import fs from "fs";
 
 export async function GET() {
-    return NextResponse.json({message: "Save Active"}, {status: 200})
+  const data: Movie[] = movies;
+  return NextResponse.json({ body: data }, { status: 200 });
 }
 
-export async function POST(
-  req: NextRequest
-) {
-    let jsonData: JSON = JSON;
-    await(req.json())
-    .then(data => jsonData = data)
-    .catch(error => {
-      return NextResponse.json({error}, {status: 500})
-    })
+export async function POST(req: NextRequest) {
+  const oldData: Movie[] = movies;
+  let postData: Movie = {
+    movieId: 0,
+    movieName: "",
+    releaseYear: 0,
+    summary: ".",
+    posterUrl:
+      "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
+    requested: true,
+  };
+  await req
+    .json()
+    .then((data) => (postData = data))
+    .catch((error) => {
+      return NextResponse.json({ error }, { status: 500 });
+    });
 
-    if (jsonData == null){
-      return NextResponse.json("Error with passed data", {status: 500})
-    }
-    fs.writeFileSync("src/app/data/test.json", JSON.stringify(jsonData))
-    return NextResponse.json({jsonData}, {status: 200})
+  if (postData == null) {
+    return NextResponse.json(
+      { message: "Error with passed data" },
+      { status: 500 }
+    );
+  }
+  if (
+    movies.filter((object) => object.movieId == postData.movieId).length != 0
+  ) {
+    return NextResponse.json(
+      { message: "Movie Already in Library", status: 500 },
+      { status: 500 }
+    );
+  }
+  oldData.push(postData);
+  fs.writeFileSync("src/app/data/test.json", JSON.stringify(oldData));
+  return NextResponse.json({ jsonData: postData }, { status: 200 });
 }
