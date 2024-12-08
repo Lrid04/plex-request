@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
 import Loading from "../ui/loading";
-import NavBar from "../ui/header";
 
 export default function Confirm() {
   const router = useRouter();
@@ -38,7 +37,7 @@ export default function Confirm() {
           ErrorNotice(json["message"]);
         } else {
           SuccessNotice("Movie Has Been Requested");
-          router.push("/");
+          router.push("/requested");
         }
       })
       .catch((error) => console.error(error));
@@ -54,7 +53,6 @@ export default function Confirm() {
 
   return (
     <div className="min-h-max">
-      <NavBar />
       <Suspense fallback={<Loading />}>
         <Search />
         <button onClick={AddMovie}>Confirm</button>

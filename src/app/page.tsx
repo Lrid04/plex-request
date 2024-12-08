@@ -3,11 +3,13 @@ import { useState, FormEvent } from "react";
 import { Movie } from "./lib/movie";
 import { FetchMovies } from "./lib/fetchMovies";
 import { useRouter } from "next/navigation";
-import NavBar from "./ui/header";
 import dynamic from "next/dynamic";
 import Loading from "./ui/loading";
+import { Button, Form, Input } from "@nextui-org/react";
 
-const SearchList = dynamic(() => import("./ui/searchList"), {loading: () => <Loading />})
+const SearchList = dynamic(() => import("./ui/searchList"), {
+  loading: () => <Loading />
+});
 
 export default function Home() {
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
@@ -30,33 +32,39 @@ export default function Home() {
     const filteredMovie: Movie = newMovies.filter(
       (e) => e.movieId == movieId
     )[0];
-    router.push(`/confirm?data=${JSON.stringify(filteredMovie)}`);
+    const encodeUrl = encodeURIComponent(JSON.stringify(filteredMovie));
+    router.push(`/confirm?data=${encodeUrl}`);
   }
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
-      <NavBar />
-      <div className="flex flex-col justify-center max-h-screen">
-        <div>
-          <form onSubmit={handleSearch} className="flex flex-col">
-            <label htmlFor="movieName">MovieName</label>
-            <input
-              type="text"
-              id="movieName"
-              name="movieName"
-              className="text-black"
-            />
-            <label htmlFor="movieYear">MovieYear</label>
-            <input
-              type="number"
-              name="movieYear"
-              id="movieYear"
-              className="text-black"
-            />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-          <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
+    <div className="flex flex-col md:flex-row max-h-svh mt-5">
+      <div className="basis-1/4 mx-10">
+        <Form
+          onSubmit={handleSearch}
+          validationBehavior="native"
+          className="dark flex items-center bg-secondary rounded p-5 border-8 border-primary"
+        >
+          <Input
+            isRequired
+            name="movieName"
+            label="Movie Name"
+            labelPlacement="inside"
+            errorMessage="Movie Name is Required"
+            size="lg"
+          />
+          <Input
+            name="movieYear"
+            label="Movie Year"
+            labelPlacement="inside"
+            type="number"
+            size="lg"
+            isClearable
+          />
+          <Button type="submit" size="lg">Submit</Button>
+        </Form>
+      </div>
+      <div className="basis-3/4">
+        <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
       </div>
     </div>
   );
