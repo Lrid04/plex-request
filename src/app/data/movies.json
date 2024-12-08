@@ -1,0 +1,30 @@
+[
+  {
+    "movieId": 1,
+    "movieName": "Test 1",
+    "releaseYear": 9999,
+    "posterUrl": "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
+    "requested": false
+  },
+  {
+    "movieId": 2,
+    "movieName": "Test 2",
+    "releaseYear": 9999,
+    "posterUrl": "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
+    "requested": false
+  },
+  {
+    "movieId": 3,
+    "movieName": "Test 3",
+    "releaseYear": 9999,
+    "posterUrl": "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
+    "requested": false
+  },
+  {
+    "movieId": 4,
+    "movieName": "Test 4",
+    "releaseYear": 9999,
+    "posterUrl": "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
+    "requested": true
+  }
+]
