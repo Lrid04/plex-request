@@ -1,10 +1,13 @@
 "use client";
 import { useState, FormEvent } from "react";
-import MovieBlock from "./ui/movieInfo";
 import { Movie } from "./lib/movie";
 import { FetchMovies } from "./lib/fetchMovies";
 import { useRouter } from "next/navigation";
 import NavBar from "./ui/header";
+import dynamic from "next/dynamic";
+import Loading from "./ui/loading";
+
+const SearchList = dynamic(() => import("./ui/searchList"), {loading: () => <Loading />})
 
 export default function Home() {
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
@@ -20,7 +23,7 @@ export default function Home() {
       const movieSelection: Movie[] = FetchMovies(movieName, movieYear);
       setNewMovies(movieSelection);
     }
-    setTimeout(router.refresh, 500);
+    setTimeout(router.refresh, 200);
   }
 
   function confirmMovie(movieId: number) {
@@ -53,15 +56,7 @@ export default function Home() {
             <input type="submit" value="Submit" />
           </form>
         </div>
-        <div className="grid grid-cols-2 grid-flow-rows max-h-max overflow-auto">
-          {newMovies.map((movie: Movie) => (
-            <MovieBlock
-              movie={movie}
-              key={movie.movieId}
-              confirmMovie={confirmMovie}
-            />
-          ))}
-        </div>
+          <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
       </div>
     </div>
   );

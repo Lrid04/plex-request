@@ -16,12 +16,10 @@ export default function Confirm() {
     let confirmData;
     const searchParm = useSearchParams();
     const data = searchParm.get("data");
-    console.log(data);
     if (data != null) {
       confirmData = JSON.parse(data);
       requestedMovie = confirmData;
     }
-    console.log(confirmData);
     return <MovieBlock movie={confirmData} />;
   }
 
@@ -55,7 +53,7 @@ export default function Confirm() {
   }
 
   return (
-    <div>
+    <div className="min-h-max">
       <NavBar />
       <Suspense fallback={<Loading />}>
         <Search />

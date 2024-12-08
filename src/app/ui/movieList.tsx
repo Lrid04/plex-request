@@ -6,7 +6,7 @@ import MovieBlock from "./movieInfo";
 export default function MovieList(props: { requested: boolean }) {
   const [movies, setMovies] = useState<Movie[]>([]);
 
-  useEffect(handleLoad, [""]);
+  useEffect(handleLoad, []);
 
   function handleLoad() {
     fetch("/api/save")

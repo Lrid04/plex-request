@@ -13,11 +13,9 @@ export async function POST(req: NextRequest) {
   let postData: Movie = {
     movieId: 0,
     movieName: "",
-    releaseYear: 0,
-    summary: ".",
-    posterUrl:
-      "https://www.mockofun.com/wp-content/uploads/2019/10/movie-poster-credits-178.jpg",
-    requested: true,
+    releaseYear: null,
+    summary: "",
+    requested: false,
   };
   await req
     .json()
@@ -32,6 +30,7 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+
   if (
     movies.filter((object) => object.movieId == postData.movieId).length != 0
   ) {
@@ -40,6 +39,7 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+
   oldData.push(postData);
   fs.writeFileSync("src/app/data/test.json", JSON.stringify(oldData));
   return NextResponse.json({ jsonData: postData }, { status: 200 });
