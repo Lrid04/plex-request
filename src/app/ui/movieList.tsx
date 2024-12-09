@@ -23,9 +23,13 @@ export default function MovieList(props: { requested: boolean }) {
       .catch((error) => console.error(error));
   }
 
-  return movies
-    .filter((object) => object.requested == props.requested)
-    .map((movie: Movie) => (
-      <MovieBlock movie={movie} key={movie.movieId + Math.random()} />
-    ));
+  return (
+    <div className="grid md:grid-cols-3 grid-cols-1 items-center justify-items-center my-5 gap-6 max-h-svh overflow-auto">
+      {movies
+        .filter((object) => object.requested == props.requested)
+        .map((movie: Movie) => (
+          <MovieBlock movie={movie} key={movie.movieId + Math.random()} />
+        ))}
+    </div>
+  );
 }

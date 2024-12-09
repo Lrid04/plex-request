@@ -35,8 +35,7 @@ export async function POST(req: NextRequest) {
     movies.filter((object) => object.movieId == postData.movieId).length != 0
   ) {
     return NextResponse.json(
-      { message: "Movie Already in Library", status: 500 },
-      { status: 500 }
+      { message: "Movie Already in Library", status: 500 }
     );
   }
 

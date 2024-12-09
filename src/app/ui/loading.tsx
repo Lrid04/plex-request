@@ -1,8 +1,9 @@
-"use client"
+import { Spinner } from "@nextui-org/react";
+
 export default function Loading() {
   return (
-    <div className="min-h-max min-w-max bg-white">
-      <h1 className="text-white">Loading...</h1>
+    <div className="flex justify-center min-h-svh min-w-svh">
+      <Spinner size="lg" color="danger" label="Loading..." />
     </div>
-);
+  );
 }

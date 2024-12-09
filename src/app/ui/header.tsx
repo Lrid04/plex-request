@@ -16,7 +16,7 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
-    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="dark bg-primary">
+    <Navbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen} maxWidth="full" className=" bg-primary">
       <NavbarContent justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}

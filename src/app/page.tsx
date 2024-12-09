@@ -42,7 +42,7 @@ export default function Home() {
         <Form
           onSubmit={handleSearch}
           validationBehavior="native"
-          className="dark flex items-center bg-secondary rounded p-5 border-8 border-primary"
+          className="flex items-center bg-secondary rounded p-5 border-8 border-primary"
         >
           <Input
             isRequired

@@ -1,5 +1,13 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { Movie } from "../lib/movie";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Image,
+  Button,
+} from "@nextui-org/react";
 
 interface MovieBlock {
   props: {
@@ -20,26 +28,32 @@ export default function MovieBlock(props: {
     poster = props.movie.posterUrl;
   }
   return (
-    <div>
-      <p>{props.movie["movieName"]}</p>
-      <p>{props.movie["releaseYear"]}</p>
-      <Image src={poster} alt="wow" width={100} height={200} />
-      <p>{props.movie["summary"]}</p>
+    <Card className="flex items-center py-4 bg-primary">
+      <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
+        <p>Movie Name: {props.movie["movieName"]}</p>
+        <p>Release Year: {props.movie["releaseYear"]}</p>
+      </CardHeader>
+      <CardBody className="flex items-center overflow-visible">
+        <Image src={poster} alt="Movie Poster" className="object-cover" height={500}/>
+      </CardBody>
       {props.confirmMovie == undefined ? (
         <></>
       ) : (
-        <button
-          onClick={() => {
-            if (props.confirmMovie == undefined) {
-              return;
-            } else {
-              props.confirmMovie(props.movie["movieId"]);
-            }
-          }}
-        >
-          Request
-        </button>
+        <CardFooter className="flex justify-center">
+          <Button
+            onClick={() => {
+              if (props.confirmMovie == undefined) {
+                return;
+              } else {
+                props.confirmMovie(props.movie["movieId"]);
+              }
+            }}
+            size="lg"
+          >
+            Request
+          </Button>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 }
