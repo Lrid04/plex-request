@@ -8,11 +8,17 @@ import Loading from "./ui/loading";
 import { Button, Form, Input } from "@nextui-org/react";
 
 const SearchList = dynamic(() => import("./ui/searchList"), {
-  loading: () => <Loading />
+  loading: () => <Loading />,
+  ssr: false,
+});
+const NoMovies = dynamic(() => import("./ui/noMovies"), {
+  loading: () => <Loading />,
+  ssr: false,
 });
 
 export default function Home() {
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
+  const [isSubmitted, Submitted] = useState(false);
   const router = useRouter();
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
@@ -25,7 +31,8 @@ export default function Home() {
       const movieSelection: Movie[] = FetchMovies(movieName, movieYear);
       setNewMovies(movieSelection);
     }
-    setTimeout(router.refresh, 200);
+    Submitted(true);
+    setTimeout(router.refresh, 500);
   }
 
   function confirmMovie(movieId: number) {
@@ -38,11 +45,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col md:flex-row max-h-svh mt-5">
-      <div className="basis-1/4 mx-10">
+      <div className="basis-1/4 mx-10 mt-5">
         <Form
           onSubmit={handleSearch}
           validationBehavior="native"
-          className="flex items-center bg-secondary rounded p-5 border-8 border-primary"
+          className="flex items-center bg-primary rounded-lg p-5 border-8 border-secondary"
         >
           <Input
             isRequired
@@ -60,11 +67,16 @@ export default function Home() {
             size="lg"
             isClearable
           />
-          <Button type="submit" size="lg">Submit</Button>
+          <Button type="submit" size="lg" variant="shadow" color="secondary">
+            Submit
+          </Button>
         </Form>
       </div>
-      <div className="basis-3/4">
-        <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
+      <div className="basis-3/4 md:mx-8">
+        {(newMovies.length >= 1 && isSubmitted && (
+          <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
+        )) ||
+          (isSubmitted && newMovies.length == 0) && <NoMovies /> || <></>}
       </div>
     </div>
   );

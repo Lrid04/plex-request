@@ -31,12 +31,18 @@ export function FetchMovies(
           overview: string;
           poster_path: string;
         }) => {
+          let poster = ""
+          if (result.poster_path == "" || result.poster_path == undefined){
+            poster = "https://www.content.numetro.co.za/ui_images/no_poster.png";
+          }else{
+            poster = "https://image.tmdb.org/t/p/original/"+result.poster_path
+          }
           movieSelect.push({
             movieId: result.id,
             movieName: result.title,
             releaseYear: Number(result.release_date.slice(0, 4)),
             summary: result.overview,
-            posterUrl: `https://image.tmdb.org/t/p/original/${result.poster_path}`,
+            posterUrl: poster,
             requested: false,
           });
         }

@@ -5,7 +5,7 @@ import fs from "fs";
 
 export async function GET() {
   const data: Movie[] = movies;
-  return NextResponse.json({ body: data }, { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
     movieName: "",
     releaseYear: null,
     summary: "",
+    posterUrl: "",
     requested: false,
   };
   await req

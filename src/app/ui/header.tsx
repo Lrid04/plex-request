@@ -16,19 +16,19 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
-    <Navbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen} maxWidth="full" className=" bg-primary">
+    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} maxWidth="full" className=" bg-primary">
       <NavbarContent justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
         <NavbarBrand>
-          <h1 className="text-left">Plex Request</h1>
+          <h1 className="text-left font-black text-2xl md:text-4xl">Plex Request</h1>
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent className="hidden sm:flex gap-5" justify="center">
         <NavbarItem isActive>
-          <Link color="foreground" href={"/"} aria-current="page">
+          <Link color="foreground" href={"/"}>
             Home
           </Link>
         </NavbarItem>
@@ -44,7 +44,7 @@ export default function NavBar() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <Button as={Link} href="#">Admin</Button>
+        <Button as={Link} variant="shadow" color="secondary" href="#">Admin</Button>
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem>

@@ -4,12 +4,13 @@ import { redirect, useSearchParams } from "next/navigation";
 import { Movie } from "../lib/movie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Loading from "../ui/loading";
+import { Button } from "@nextui-org/react";
 
 export default function Confirm() {
   const router = useRouter();
+  const [isLoading, setLoading] = useState(false)
   let requestedMovie: Movie;
   function Search() {
     let confirmData;
@@ -19,10 +20,11 @@ export default function Confirm() {
       confirmData = JSON.parse(data);
       requestedMovie = confirmData;
     }
-    return <MovieBlock movie={confirmData} />;
+    return <MovieBlock movie={confirmData} summary={true}/>;
   }
 
   function AddMovie() {
+    setLoading(true)
     requestedMovie["requested"] = true;
     fetch("/api/save", {
       method: "POST",
@@ -35,9 +37,11 @@ export default function Confirm() {
       .then((json) => {
         if (json["status"] == 500) {
           ErrorNotice(json["message"]);
+          setLoading(false)
         } else {
           SuccessNotice("Movie Has Been Requested");
-          router.push("/requested");
+          router.replace("/requested");
+          setTimeout(() => setLoading(false), 1000)
         }
       })
       .catch((error) => console.error(error));
@@ -52,11 +56,13 @@ export default function Confirm() {
   }
 
   return (
-    <div className="min-h-max">
+    <div className="min-h-max md:px-[25%] px-[15%] py-5">
       <Suspense fallback={<Loading />}>
         <Search />
-        <button onClick={AddMovie}>Confirm</button>
-        <button onClick={() => redirect("/")}>Cancel</button>
+        <div className="flex justify-center m-5">
+          <Button isLoading={isLoading} onClick={AddMovie} variant="shadow" color="secondary" size="lg" className="mr-5">Confirm</Button>
+          <Button onClick={() => redirect("/")} variant="shadow" color="secondary" size="lg" className="ml-5">Cancel</Button>
+        </div>
       </Suspense>
     </div>
   );
