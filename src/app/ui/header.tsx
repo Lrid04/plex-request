@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { useState } from "react";
 
+//TODO add theme switcher
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
@@ -44,7 +45,7 @@ export default function NavBar() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <Button as={Link} variant="shadow" color="secondary" href="#">Admin</Button>
+        <Button as={Link} variant="shadow" color="secondary" href="/login">Admin</Button>
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem>

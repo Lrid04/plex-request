@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["www.mockofun.com", "image.tmdb.org"]
   },
+  env: {
+      adminUser: "plexAdmin",
+      adminPass: "Sep12004!"
+  }
 };
 
 export default nextConfig;

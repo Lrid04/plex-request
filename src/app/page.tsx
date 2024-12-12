@@ -7,13 +7,14 @@ import dynamic from "next/dynamic";
 import Loading from "./ui/loading";
 import { Button, Form, Input } from "@nextui-org/react";
 
+
 const SearchList = dynamic(() => import("./ui/searchList"), {
   loading: () => <Loading />,
   ssr: false,
 });
 const NoMovies = dynamic(() => import("./ui/noMovies"), {
   loading: () => <Loading />,
-  ssr: false,
+  ssr: false
 });
 
 export default function Home() {

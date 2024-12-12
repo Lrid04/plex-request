@@ -1,5 +1,6 @@
 import {nextui} from '@nextui-org/theme';
 import type { Config } from "tailwindcss";
+//TODO make light theme colors
 
 export default {
   content: [

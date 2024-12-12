@@ -10,20 +10,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const oldData: Movie[] = movies;
-  let postData: Movie = {
-    movieId: 0,
-    movieName: "",
-    releaseYear: null,
-    summary: "",
-    posterUrl: "",
-    requested: false,
-  };
-  await req
-    .json()
-    .then((data) => (postData = data))
-    .catch((error) => {
-      return NextResponse.json({ error }, { status: 500 });
-    });
+  let postData: Movie = await req.json().catch((error) => {
+    return NextResponse.json({ error }, { status: 500 });
+  });
 
   if (postData == null) {
     return NextResponse.json(
@@ -35,9 +24,17 @@ export async function POST(req: NextRequest) {
   if (
     movies.filter((object) => object.movieId == postData.movieId).length != 0
   ) {
-    return NextResponse.json(
-      { message: "Movie Already in Library", status: 500 }
-    );
+    if (postData.requested == false) {
+      return NextResponse.json({
+        message: "Movie Already in Library",
+        status: 401,
+      });
+    } else {
+      return NextResponse.json({
+        message: "Movie Already in Requested",
+        status: 401,
+      });
+    }
   }
 
   oldData.push(postData);
