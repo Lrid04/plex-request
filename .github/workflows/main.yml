@@ -1,0 +1,26 @@
+name: Plex_Request_Testing
+
+on:
+  push:
+    branches:
+      master
+
+jobs:
+  Build_Front:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install
+      - name: Build Front
+        run: npm run build
+  Scan_Packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install
+      - name: Scan Vulnerabilities
+        run: npm audit --json
