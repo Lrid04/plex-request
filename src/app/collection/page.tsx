@@ -1,18 +1,24 @@
+"use client"
 import dynamic from "next/dynamic";
 import Loading from "../ui/loading";
-import NavBar from "../ui/header";
+import { useEffect, useState } from "react";
+import { Movie } from "../lib/movie";
 
 const MovieList = dynamic(() => import("../ui/movieList"), {
   loading: () => <Loading />,
+  ssr: false
 });
 
 export default function Collection() {
-  return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
-      <NavBar />
-      <div className="grid grid-cols-2 grid-flow-rows items-center justify-items-center px-10 pb-20 gap-16 sm:p-20  max-h-screen overflow-auto">
-        <MovieList requested={false} />
-      </div>
-    </div>
-  );
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(handleLoad, []);
+
+  function handleLoad() {
+    fetch("/api/save")
+      .then((res) => res.json())
+      .then((load) => setMovies(load))
+      .catch((error) => console.error(error));
+  }
+  return <MovieList requested={false} admin={false} movies={movies}/>;
 }

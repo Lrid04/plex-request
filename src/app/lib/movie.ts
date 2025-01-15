@@ -3,6 +3,6 @@ export type Movie = {
   movieName: string;
   releaseYear: number | null;
   summary: string;
-  posterUrl?: string | null;
+  posterUrl: string | null;
   requested: boolean;
 };

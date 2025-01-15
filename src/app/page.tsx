@@ -1,16 +1,25 @@
 "use client";
 import { useState, FormEvent } from "react";
 import { Movie } from "./lib/movie";
-import { FetchMovies } from "./lib/fetchMovies";
+import { FetchMovies } from "./lib/fetchSearchMovies";
 import { useRouter } from "next/navigation";
-import NavBar from "./ui/header";
 import dynamic from "next/dynamic";
 import Loading from "./ui/loading";
+import { Button, Form, Input } from "@nextui-org/react";
 
-const SearchList = dynamic(() => import("./ui/searchList"), {loading: () => <Loading />})
+
+const SearchList = dynamic(() => import("./ui/searchList"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
+const NoMovies = dynamic(() => import("./ui/noMovies"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
 
 export default function Home() {
   const [newMovies, setNewMovies] = useState<Movie[]>([]);
+  const [isSubmitted, Submitted] = useState(false);
   const router = useRouter();
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
@@ -23,40 +32,54 @@ export default function Home() {
       const movieSelection: Movie[] = FetchMovies(movieName, movieYear);
       setNewMovies(movieSelection);
     }
-    setTimeout(router.refresh, 200);
+    Submitted(true);
+    setTimeout(router.refresh, 500);
   }
 
   function confirmMovie(movieId: number) {
     const filteredMovie: Movie = newMovies.filter(
       (e) => e.movieId == movieId
     )[0];
-    router.push(`/confirm?data=${JSON.stringify(filteredMovie)}`);
+    const encodeUrl = encodeURIComponent(JSON.stringify(filteredMovie));
+    router.push(`/confirm?data=${encodeUrl}`);
   }
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
-      <NavBar />
-      <div className="flex flex-col justify-center max-h-screen">
-        <div>
-          <form onSubmit={handleSearch} className="flex flex-col">
-            <label htmlFor="movieName">MovieName</label>
-            <input
-              type="text"
-              id="movieName"
-              name="movieName"
-              className="text-black"
-            />
-            <label htmlFor="movieYear">MovieYear</label>
-            <input
-              type="number"
-              name="movieYear"
-              id="movieYear"
-              className="text-black"
-            />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
+    <div className="flex flex-col md:flex-row max-h-svh mt-5">
+      <div className="basis-1/4 mx-10 mt-5">
+        <Form
+          onSubmit={handleSearch}
+          validationBehavior="native"
+          className="flex items-center bg-primary rounded-lg p-5 border-8 border-secondary"
+        >
+          <Input
+            isRequired
+            spellCheck
+            name="movieName"
+            label="Movie Name"
+            labelPlacement="inside"
+            errorMessage="Movie Name is Required"
+            size="lg"
+          />
+          <Input
+            name="movieYear"
+            spellCheck
+            label="Movie Year"
+            labelPlacement="inside"
+            type="number"
+            size="lg"
+            isClearable
+          />
+          <Button type="submit" size="lg" variant="shadow" color="secondary">
+            Submit
+          </Button>
+        </Form>
+      </div>
+      <div className="basis-3/4 md:mx-8">
+        {(newMovies.length != 0 && isSubmitted) && 
           <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
+        ||
+          (isSubmitted) && <NoMovies />}
       </div>
     </div>
   );

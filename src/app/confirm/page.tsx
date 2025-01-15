@@ -3,14 +3,14 @@ import MovieBlock from "../ui/movieInfo";
 import { redirect, useSearchParams } from "next/navigation";
 import { Movie } from "../lib/movie";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Loading from "../ui/loading";
-import NavBar from "../ui/header";
+import { Button } from "@nextui-org/react";
+import { ErrorNotice, SuccessNotice} from "../lib/toastControl"
 
 export default function Confirm() {
   const router = useRouter();
+  const [isLoading, setLoading] = useState(false)
   let requestedMovie: Movie;
   function Search() {
     let confirmData;
@@ -20,10 +20,11 @@ export default function Confirm() {
       confirmData = JSON.parse(data);
       requestedMovie = confirmData;
     }
-    return <MovieBlock movie={confirmData} />;
+    return <MovieBlock movie={confirmData} summary={true}/>;
   }
 
   function AddMovie() {
+    setLoading(true)
     requestedMovie["requested"] = true;
     fetch("/api/save", {
       method: "POST",
@@ -34,31 +35,26 @@ export default function Confirm() {
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json["status"] == 500) {
+        if (json['status'] == 401) {
           ErrorNotice(json["message"]);
+          setLoading(false)
         } else {
           SuccessNotice("Movie Has Been Requested");
-          router.push("/");
+          router.replace("/requested");
+          setTimeout(() => setLoading(false), 1000)
         }
       })
       .catch((error) => console.error(error));
   }
 
-  function ErrorNotice(error: string | null) {
-    toast.error(error);
-  }
-
-  function SuccessNotice(error: string | null) {
-    toast.success(error);
-  }
-
   return (
-    <div className="min-h-max">
-      <NavBar />
+    <div className="min-h-max md:px-[25%] px-[15%] py-5">
       <Suspense fallback={<Loading />}>
         <Search />
-        <button onClick={AddMovie}>Confirm</button>
-        <button onClick={() => redirect("/")}>Cancel</button>
+        <div className="flex justify-center m-5">
+          <Button isLoading={isLoading} onClick={AddMovie} variant="shadow" color="secondary" size="lg" className="mr-5">Confirm</Button>
+          <Button onClick={() => redirect("/")} variant="shadow" color="secondary" size="lg" className="ml-5">Cancel</Button>
+        </div>
       </Suspense>
     </div>
   );

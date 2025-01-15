@@ -1,28 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Movie } from "../../lib/movie";
-import movies from "../../data/test.json";
+import movies from "../../data/mediaJson.json";
 import fs from "fs";
 
 export async function GET() {
   const data: Movie[] = movies;
-  return NextResponse.json({ body: data }, { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
   const oldData: Movie[] = movies;
-  let postData: Movie = {
-    movieId: 0,
-    movieName: "",
-    releaseYear: null,
-    summary: "",
-    requested: false,
-  };
-  await req
-    .json()
-    .then((data) => (postData = data))
-    .catch((error) => {
-      return NextResponse.json({ error }, { status: 500 });
-    });
+  const postData: Movie = await req.json().catch((error) => {
+    return NextResponse.json({ error }, { status: 500 });
+  });
 
   if (postData == null) {
     return NextResponse.json(
@@ -30,14 +20,21 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-
-  if (
-    movies.filter((object) => object.movieId == postData.movieId).length != 0
-  ) {
-    return NextResponse.json(
-      { message: "Movie Already in Library", status: 500 },
-      { status: 500 }
-    );
+  const filterMovies: Movie[] = oldData.filter(
+    (object) => object.movieId == postData.movieId
+  );
+  if (filterMovies.length != 0) {
+    if (!filterMovies[0].requested) {
+      return NextResponse.json({
+        message: "Movie Already in Library",
+        status: 401,
+      }, {status: 401});
+    } else {
+      return NextResponse.json({
+        message: "Movie Already in Requested",
+        status: 401,
+      }, {status: 401});
+    }
   }
 
   oldData.push(postData);
