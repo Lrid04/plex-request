@@ -1,11 +1,42 @@
-import { cookies } from "next/headers";
+"use client"
 import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import Authorization from "../lib/authorized";
+import dynamic from "next/dynamic";
+import Loading from "../ui/loading";
+import { Movie } from "../lib/movie";
 
-export default async function Admin() {
-  const userCooks = await cookies();
-  if (userCooks.get("auth")?.value != "true") {
-    redirect("/")
+const MovieList = dynamic(() => import("../ui/movieList"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
+
+export default function Admin() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(handleLoad, []);
+
+  function handleLoad() {
+    fetch("/api/save")
+      .then((res) => res.json())
+      .then((load) => setMovies(load))
+      .catch((error) => console.error(error));
   }
- 
-  return (<h1>Wow</h1>)
+
+  useEffect(() => {
+    isAuthorized();
+  }, []);
+
+  async function isAuthorized() {
+    if (!(await Authorization())) {
+      redirect("/");
+    }
+  }
+
+  return (
+    <div>
+      <h1 className="text-center text-2xl md:text-3xl pt-5">Admin Page</h1>
+      <MovieList requested={true} admin={true} movies={movies} />
+    </div>
+  );
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Movie } from "../../lib/movie";
-import movies from "../../data/test.json";
+import movies from "../../data/mediaJson.json";
 import fs from "fs";
 
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const oldData: Movie[] = movies;
-  let postData: Movie = await req.json().catch((error) => {
+  const postData: Movie = await req.json().catch((error) => {
     return NextResponse.json({ error }, { status: 500 });
   });
 
@@ -20,20 +20,20 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-
-  if (
-    movies.filter((object) => object.movieId == postData.movieId).length != 0
-  ) {
-    if (postData.requested == false) {
+  const filterMovies: Movie[] = oldData.filter(
+    (object) => object.movieId == postData.movieId
+  );
+  if (filterMovies.length != 0) {
+    if (!filterMovies[0].requested) {
       return NextResponse.json({
         message: "Movie Already in Library",
         status: 401,
-      });
+      }, {status: 401});
     } else {
       return NextResponse.json({
         message: "Movie Already in Requested",
         status: 401,
-      });
+      }, {status: 401});
     }
   }
 

@@ -1,7 +1,7 @@
 "use client";
 import { useState, FormEvent } from "react";
 import { Movie } from "./lib/movie";
-import { FetchMovies } from "./lib/fetchMovies";
+import { FetchMovies } from "./lib/fetchSearchMovies";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Loading from "./ui/loading";
@@ -14,7 +14,7 @@ const SearchList = dynamic(() => import("./ui/searchList"), {
 });
 const NoMovies = dynamic(() => import("./ui/noMovies"), {
   loading: () => <Loading />,
-  ssr: false
+  ssr: false,
 });
 
 export default function Home() {
@@ -54,6 +54,7 @@ export default function Home() {
         >
           <Input
             isRequired
+            spellCheck
             name="movieName"
             label="Movie Name"
             labelPlacement="inside"
@@ -62,6 +63,7 @@ export default function Home() {
           />
           <Input
             name="movieYear"
+            spellCheck
             label="Movie Year"
             labelPlacement="inside"
             type="number"
@@ -74,10 +76,10 @@ export default function Home() {
         </Form>
       </div>
       <div className="basis-3/4 md:mx-8">
-        {(newMovies.length >= 1 && isSubmitted && (
+        {(newMovies.length != 0 && isSubmitted) && 
           <SearchList newMovies={newMovies} confirmMovie={confirmMovie} />
-        )) ||
-          (isSubmitted && newMovies.length == 0) && <NoMovies /> || <></>}
+        ||
+          (isSubmitted) && <NoMovies />}
       </div>
     </div>
   );

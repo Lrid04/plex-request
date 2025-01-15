@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
   const validUser = process.env.adminUser;
   const validPass = process.env.adminPass;
 
-  if (username == validUser && password == validPass) {
-    userCook.set("auth", "true", {maxAge: 86400})
+  if (username === validUser && password === validPass) {
+    userCook.set("auth", "true", {maxAge: 86400, sameSite: "strict"})
     return NextResponse.json({ success: true }, { status: 200 });
   } else {
     if (username != validUser && password != validPass) {

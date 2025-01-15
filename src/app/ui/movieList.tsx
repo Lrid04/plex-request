@@ -1,27 +1,33 @@
-"use client"
-import { useEffect, useState } from "react";
 import { Movie } from "../lib/movie";
 import MovieBlock from "./movieInfo";
+import AdminMovieBlock from "./adminMovieInfo";
 
-export default function MovieList(props: { requested: boolean }) {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  
-  useEffect(handleLoad, [])
+export default function MovieList(props: {
+  requested: boolean;
+  admin: boolean;
+  movies: Movie[];
+}) {
 
-  function handleLoad(){
-    fetch("/api/save")
-    .then((res) => res.json())
-    .then((load) => setMovies(load))
-    .catch((error) => console.error(error));
-  }
-  
   return (
-    <div className="grid md:grid-cols-4 grid-cols-1 items-center justify-items-center md:mx-10 mx-5 mt-8 gap-6 max-h-svh overflow-auto">
-      {movies
-        .filter((object) => object.requested == props.requested)
-        .map((movie: Movie) => (
-          <MovieBlock movie={movie} summary={false} key={movie.movieId + Math.random()} />
-        ))}
+    <div className="grid md:grid-cols-4 grid-cols-1 items-center justify-items-center md:mx-10 mx-5 my-5 gap-6 max-h-svh overflow-auto">
+      {(props.admin &&
+        props.movies
+          .filter((object) => object.requested == props.requested)
+          .map((movie: Movie) => (
+            <AdminMovieBlock
+              movie={movie}
+              key={movie.movieId + Math.random()}
+            />
+          ))) ||
+        props.movies
+          .filter((object) => object.requested == props.requested)
+          .map((movie: Movie) => (
+            <MovieBlock
+              movie={movie}
+              summary={false}
+              key={movie.movieId + Math.random()}
+            />
+          ))}
     </div>
   );
 }

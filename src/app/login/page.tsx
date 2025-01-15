@@ -3,7 +3,6 @@ import { Button, Form, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-//TODO Add bypass when already logged in
 export default function Login() {
   const router = useRouter();
   const [errors, setErrors] = useState();
@@ -21,12 +20,11 @@ export default function Login() {
       body: JSON.stringify({ username, password }),
     });
 
-    let data = await res.json().catch((error) => console.error(error));
-    console.log(data);
+    const data = await res.json().catch((error) => console.error(error));
     if (data["success"]) {
       router.push("/admin");
-    }else{
-        setErrors(data["errors"])
+    } else {
+      setErrors(data["errors"]);
     }
   }
 
@@ -42,10 +40,10 @@ export default function Login() {
           labelPlacement="inside"
           size="lg"
           validate={() => {
-            if(errors != null){
-                if(errors['username'] != undefined){
-                    return errors['username']
-                }
+            if (errors != null) {
+              if (errors["username"] != undefined) {
+                return errors["username"];
+              }
             }
           }}
         />
@@ -56,10 +54,10 @@ export default function Login() {
           labelPlacement="inside"
           size="lg"
           validate={() => {
-            if(errors != null){
-                if(errors['password'] != undefined){
-                    return errors['password']
-                }
+            if (errors != null) {
+              if (errors["password"] != undefined) {
+                return errors["password"];
+              }
             }
           }}
         />

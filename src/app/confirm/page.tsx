@@ -3,10 +3,10 @@ import MovieBlock from "../ui/movieInfo";
 import { redirect, useSearchParams } from "next/navigation";
 import { Movie } from "../lib/movie";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import { Suspense, useState } from "react";
 import Loading from "../ui/loading";
 import { Button } from "@nextui-org/react";
+import { ErrorNotice, SuccessNotice} from "../lib/toastControl"
 
 export default function Confirm() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Confirm() {
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json["status"] == 500) {
+        if (json['status'] == 401) {
           ErrorNotice(json["message"]);
           setLoading(false)
         } else {
@@ -45,14 +45,6 @@ export default function Confirm() {
         }
       })
       .catch((error) => console.error(error));
-  }
-
-  function ErrorNotice(error: string | null) {
-    toast.error(error);
-  }
-
-  function SuccessNotice(error: string | null) {
-    toast.success(error);
   }
 
   return (

@@ -10,14 +10,25 @@ import {
   NavbarBrand,
   Button,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Authorization from "../lib/authorized";
+import ThemeSwitcher from "./themeSwitch";
 
-//TODO add theme switcher
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [href, setHref] = useState("/login");
+  useEffect(() => {
+      isAuthorized();
+    });
+  
+    async function isAuthorized() {
+      if (await Authorization()) {
+        setHref("/admin")
+      }
+    }
   
   return (
-    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} maxWidth="full" className=" bg-primary">
+    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="bg-primary">
       <NavbarContent justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -45,7 +56,8 @@ export default function NavBar() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <Button as={Link} variant="shadow" color="secondary" href="/login">Admin</Button>
+        <ThemeSwitcher/>
+        <Button as={Link} variant="shadow" color="secondary" href={href}>Admin</Button>
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem>
@@ -59,7 +71,7 @@ export default function NavBar() {
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link color="foreground" href={"/collection"}>
+          <Link color="foreground" href={"/collecti on"}>
             Library
           </Link>
         </NavbarMenuItem>

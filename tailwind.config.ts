@@ -1,6 +1,5 @@
 import {nextui} from '@nextui-org/theme';
 import type { Config } from "tailwindcss";
-//TODO make light theme colors
 
 export default {
   content: [
@@ -20,7 +19,6 @@ export default {
   darkMode: "class",
   plugins: [nextui({
     addCommonColors: true,
-    defaultTheme: "dark",
     themes: {
       dark: {
         colors: {
@@ -32,10 +30,10 @@ export default {
       },
       light: {
         colors: {
-          background: "#DBE2EF",
-          foreground: "#DBE2EF",
-          primary: "#3F72AF",
-          secondary: "#112D4E"
+          background: "#F0F4F8",
+          foreground: "#1C1C1C",
+          primary: "#C5C5C5",
+          secondary: "#A0A0A0"
         }
       }
     }

@@ -26,9 +26,9 @@ export default function RootLayout({
         className={`${plexSans.className} text-lg antialiased min-h-svh`}
       >
         <Providers>
-        <NavBar />
+          <NavBar />
           {children}
-          <ToastContainer />  
+          <ToastContainer />
         </Providers>
       </body>
     </html>
