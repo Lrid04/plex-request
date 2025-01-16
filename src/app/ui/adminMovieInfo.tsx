@@ -10,12 +10,12 @@ import {
 } from "@nextui-org/react";
 
 export default function AdminMovieBlock(props: { movie: Movie }) {
-  function AddLibrary(){
+  function AddLibrary() {
     ConfirmRequest(props.movie.movieId);
   }
 
-  function RemoveRequest(){
-    DeleteRequest(props.movie.movieId)
+  function RemoveRequest() {
+    DeleteRequest(props.movie.movieId);
   }
 
   return (
@@ -32,16 +32,28 @@ export default function AdminMovieBlock(props: { movie: Movie }) {
             props.movie["posterUrl"] ||
             "https://www.content.numetro.co.za/ui_images/no_poster.png"
           }
-          height={400}
+          height={500}
           alt="Movie Poster"
           className="object-cover overflow-visible"
         />
       </CardBody>
       <CardFooter className="flex justify-evenly">
-        <Button size="lg" variant="shadow" color="secondary" onClick={AddLibrary}>
+        <Button
+          size="lg"
+          variant="shadow"
+          color="secondary"
+          onClick={AddLibrary}
+          onTouchStart={AddLibrary}
+        >
           Added
         </Button>
-        <Button size="lg" variant="shadow" color="secondary" onClick={RemoveRequest}>
+        <Button
+          size="lg"
+          variant="shadow"
+          color="secondary"
+          onClick={RemoveRequest}
+          onTouchStart={RemoveRequest}
+        >
           Remove
         </Button>
       </CardFooter>

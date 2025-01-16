@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import Loading from "../ui/loading";
 import { Button } from "@nextui-org/react";
-import { ErrorNotice, SuccessNotice} from "../lib/toastControl"
+import { ErrorNotice, SuccessNotice } from "../lib/toastControl";
 
 export default function Confirm() {
   const router = useRouter();
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false);
   let requestedMovie: Movie;
   function Search() {
     let confirmData;
@@ -20,11 +20,11 @@ export default function Confirm() {
       confirmData = JSON.parse(data);
       requestedMovie = confirmData;
     }
-    return <MovieBlock movie={confirmData} summary={true}/>;
+    return <MovieBlock movie={confirmData} summary={true} />;
   }
 
   function AddMovie() {
-    setLoading(true)
+    setLoading(true);
     requestedMovie["requested"] = true;
     fetch("/api/save", {
       method: "POST",
@@ -34,15 +34,16 @@ export default function Confirm() {
       body: JSON.stringify(requestedMovie),
     })
       .then((res) => res.json())
-      .then((json) => {
-        if (json['status'] == 401) {
-          ErrorNotice(json["message"]);
-          setLoading(false)
-        } else {
-          SuccessNotice("Movie Has Been Requested");
-          router.replace("/requested");
-          setTimeout(() => setLoading(false), 1000)
+      .then((data) => {
+        if (data.status == 401) {
+          ErrorNotice(data.message);
+          router.replace("/");
+          setTimeout(() => setLoading(false), 1000);
+          return;
         }
+        SuccessNotice("Movie Has Been Requested");
+        router.replace("/requested");
+        setTimeout(() => setLoading(false), 1000);
       })
       .catch((error) => console.error(error));
   }
@@ -52,8 +53,27 @@ export default function Confirm() {
       <Suspense fallback={<Loading />}>
         <Search />
         <div className="flex justify-center m-5">
-          <Button isLoading={isLoading} onClick={AddMovie} variant="shadow" color="secondary" size="lg" className="mr-5">Confirm</Button>
-          <Button onClick={() => redirect("/")} variant="shadow" color="secondary" size="lg" className="ml-5">Cancel</Button>
+          <Button
+            isLoading={isLoading}
+            onClick={AddMovie}
+            onTouchStart={AddMovie}
+            variant="shadow"
+            color="secondary"
+            size="lg"
+            className="mr-5"
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={() => redirect("/")}
+            onTouchStart={() => redirect("/")}
+            variant="shadow"
+            color="secondary"
+            size="lg"
+            className="ml-5"
+          >
+            Cancel
+          </Button>
         </div>
       </Suspense>
     </div>

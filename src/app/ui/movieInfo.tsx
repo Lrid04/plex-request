@@ -1,3 +1,4 @@
+"use client"
 import { Movie } from "../lib/movie";
 import {
   Card,
@@ -34,7 +35,8 @@ export default function MovieBlock(props: {
             props.movie["posterUrl"] ||
             "https://www.content.numetro.co.za/ui_images/no_poster.png"
           }
-          height={400}
+          height={475}
+          width={250}
           alt="Movie Poster"
           className="object-cover overflow-visible"
         />
@@ -48,13 +50,19 @@ export default function MovieBlock(props: {
       {(props.confirmMovie == undefined && <></>) || (
         <CardFooter className="flex justify-center">
           <Button
-            onClick={() => {
-              if (props.confirmMovie == undefined) {
-                return;
-              } else {
-                props.confirmMovie(props.movie["movieId"]);
+            onTouchStart={() => {
+              if(props.confirmMovie != undefined){
+                props.confirmMovie(props.movie["movieId"])
+                console.log(props.confirmMovie)
               }
-            }}
+          }}
+            onClick={() => {
+              if(props.confirmMovie != undefined){
+                props.confirmMovie(props.movie["movieId"])
+                console.log(props.confirmMovie)
+              }
+            }
+            }
             size="lg"
             variant="shadow"
             color="secondary"

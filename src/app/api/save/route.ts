@@ -1,3 +1,4 @@
+"use server";
 import { NextRequest, NextResponse } from "next/server";
 import { Movie } from "../../lib/movie";
 import movies from "../../data/mediaJson.json";
@@ -25,19 +26,25 @@ export async function POST(req: NextRequest) {
   );
   if (filterMovies.length != 0) {
     if (!filterMovies[0].requested) {
-      return NextResponse.json({
-        message: "Movie Already in Library",
-        status: 401,
-      }, {status: 401});
+      return NextResponse.json(
+        {
+          message: "Movie Already in Library",
+          status: 401,
+        },
+        { status: 401 }
+      );
     } else {
-      return NextResponse.json({
-        message: "Movie Already in Requested",
-        status: 401,
-      }, {status: 401});
+      return NextResponse.json(
+        {
+          message: "Movie Already in Requested",
+          status: 401,
+        },
+        { status: 401 }
+      );
     }
   }
 
   oldData.push(postData);
-  fs.writeFileSync("src/app/data/test.json", JSON.stringify(oldData));
-  return NextResponse.json({ jsonData: postData }, { status: 200 });
+  fs.writeFileSync("src/app/data/mediaJson.json", JSON.stringify(oldData));
+  return NextResponse.json({ x: postData }, { status: 200 });
 }
