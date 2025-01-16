@@ -3,7 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["www.mockofun.com", "image.tmdb.org"]
+    remotePatterns:[
+      {
+        hostname: "mockofun.com"
+      },
+      {
+        hostname: "image.tmdb.org"
+      }
+    ]
   },
   env: {
       adminUser: "plexAdmin",

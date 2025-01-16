@@ -71,7 +71,7 @@ export default function NavBar() {
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link color="foreground" href={"/collecti on"}>
+          <Link color="foreground" href={"/collection"}>
             Library
           </Link>
         </NavbarMenuItem>

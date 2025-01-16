@@ -1,3 +1,4 @@
+"use server"
 import { NextRequest, NextResponse } from "next/server";
 import { Movie } from "../../lib/movie";
 import movies from "../../data/mediaJson.json";
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
   );
   if (filterMovies.length != 0) {
     oldData[oldData.indexOf(filterMovies[0])].requested = false
-    fs.writeFileSync("src/app/data/test.json", JSON.stringify(oldData));
+    fs.writeFileSync("src/app/data/mediaJson.json", JSON.stringify(oldData));
     return NextResponse.json({ jsonData: postData }, { status: 200 });
   }
   return NextResponse.json({message: "Error Finding Movie", status: 404}, {status: 404})
